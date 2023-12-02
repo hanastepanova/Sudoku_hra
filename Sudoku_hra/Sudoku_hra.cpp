@@ -38,8 +38,8 @@ void uvodniTabule(int tabulka[N][N])
 	printf("<3                                           SUDOKU                                        <3\n");
 	printf("<3                                                                                         <3\n");
 	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
-	printf("PRAVIDLA: Umistete cisla 1-9 do jedenaosmdesati ctverecku tak, aby se v radku, sloupci ani v malem ctverecku \n zadne cislo neopakovalo. Stisknete 1, pokud chcete zobrazit reseni.\n Stisknete 2, pokud chcete zobrazit tabulku nejvyssich score.\n Stisknete 3, pokud chcete hru ulozit.\n \n \n");
-	printf("Mnoho zdaru pri hre!\n \n");
+	printf("PRAVIDLA: Umistete cisla 1-9 misto 0 tak, aby se v radku, sloupci ani \n v malem ctverecku zadne cislo neopakovalo. Behem hry se Vam zapocitava \n cas, pricemz nejrychlejsi hraci jsou zapsani do tabulky nejvyssich score.\n\n Stisknete 1, pokud chcete zobrazit tabulku nejvyssich score.\n Stisknete 2, pokud chcete hru ulozit a pokracovat ve hre priste.\n \n \n");
+	printf("\nMnoho zdaru pri hre!\n \n");
 	for (int radek = 0; radek < N; radek++)
 	{
 		for (int sloupec = 0; sloupec < N; sloupec++)
@@ -107,7 +107,7 @@ void hratSudoku(int pole[N][N])
 	{
 		uvodniTabule(pole);
 		printf("\n \n");
-		printf("Nemuzete vyresit sudoku? Zadejte 0 misto radku, sloupce i cisla pro zobrazeni reseni.\n");
+		printf("\nNemuzete vyresit sudoku? Zadejte 0 misto radku, sloupce i cisla pro zobrazeni reseni.\n");
 		printf("Cislo radku: ");
 		scanf(" %d", &radek);
 		printf("Cislo sloupce: ");
@@ -131,7 +131,7 @@ void hratSudoku(int pole[N][N])
 		sloupec--;
 		if (!kontrola(pole, radek, sloupec, cislo))
 		{
-			printf("Neni mozne doplnit toto cislo. Zkuste to znovu.\n \n");
+			printf("\nNeni mozne doplnit toto cislo. Zkuste to znovu.\n \n");
 			continue;
 		}
 		pole[radek][sloupec] = cislo;
@@ -153,12 +153,12 @@ void hratSudoku(int pole[N][N])
 
 	if (vyreseno)
 	{
-		printf("Gratuluji k vyreseni sudoku!");
+		printf("\nGratuluji k vyreseni sudoku!");
 		uvodniTabule(pole);
 	}
 
 	else {
-		printf("Sudoku nebylo vyreseno. Zkuste to znovu!\n");
+		printf("\nSudoku nebylo vyreseno. Zkuste to znovu!\n");
 	}
 
 }
@@ -178,7 +178,7 @@ int main()
 
 	if (fopen_s(&vstupniSoubor, vstupniCesta, "r"))
 	{
-		printf("Soubor se nemohl otevrit.\n");
+		printf("Soubor se nepodarilo otevrit.\n");
 		return -1;
 
 	}
@@ -200,7 +200,9 @@ int main()
 
 	
 
-	//= {
+	//v pripade, ze bychom chteli doplnit tabulku sudoku odsud
+	//int pole [N][N] =
+	// {
 		//{3, 0, 6, 5, 0, 8, 4, 0, 0},
 		//{5, 2, 0, 0, 0, 0, 0, 0, 0},
 		//{0, 8, 7, 0, 0, 0, 0, 3, 1},
@@ -212,7 +214,7 @@ int main()
 		//{0, 0, 5, 2, 0, 6, 3, 0, 0}
 		//};
 
-	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+	printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 	printf("<3                                                                                         <3\n");
 	printf("<3                                           SUDOKU                                        <3\n");
 	printf("<3                                                                                         <3\n");
@@ -224,7 +226,7 @@ int main()
 		int volba;  
 		printf("\n \n");
 		printf("Vitame Vas u hry Sudoku! Jste pripraveni zucastnit se teto vzrusujici hry?\n\n Stisknete 1, pokud chcete zacit hrat!\n Stisknete 2, pokud chcete zobrazit reseni.\n Stisknete 3, pokud chcete zobrazit tabulku nejvyssich score.\n \n \n");
-		printf("Vase volba: ");
+		printf("Vase volba: \n\n");
 		scanf("%d", &volba);  
 
 		switch (volba)
@@ -235,7 +237,7 @@ int main()
 		case 2:
 			if (reseniSudoku(pole, 0, 0))
 			{
-				printf("Vyresene sudoku: \n");
+				printf("\nVyresene sudoku: \n");
 				printf("\n \n");
 				for (int radek = 0; radek < N; radek++)
 				{
@@ -256,16 +258,16 @@ int main()
 
 				}
 				printf("\n");
-				printf("Zkuste to priste!");
+				printf("\nZkuste to priste!");
 
 			}
 			else
-				printf("Reseni nebylo nalezeno.\n");
+				printf("\nReseni nebylo nalezeno.\n");
 			break;
 		case 3:
 			exit(0);
 		default:
-			printf("Nespravna volba.\n");
+			printf("\nNespravna volba.\n");
 		
 		}
 		return 0;
