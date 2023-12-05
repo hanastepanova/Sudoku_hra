@@ -11,7 +11,7 @@ void update_highscores(score *score, int score) {
     printf("Enter your name: ");
     scanf("%s", jmeno);
 
-    FILE *file = fopen("vystupniSoubor.txt"//?? "a"); // Open file in append mode
+    FILE *file = fopen("vystupniSoubor.txt", "a"); // Open file in append mode
 
     if (file != NULL) {
         fprintf(file, "%s %d\n", jmeno, score);
