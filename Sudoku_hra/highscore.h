@@ -1,26 +1,20 @@
 #ifndef HIGHSCORE_H
 #define HIGHSCORE_H
 
-#include <vector>
-#include <algorithm>
-#include <stdio.h>
-#include <iostream>
+// Adjust the structure and function declarations based on your requirements
 
-struct ScoreEntry {
-    std::string playerName;
+typedef struct {
+    char jmeno[50];
     int score;
-};
+} scoreEntry;
 
-class Highscore {
-public:
-    Highscore();
-    void addHighscore(const std::string &playerName, int score);
-    void printHighscores() const;
+typedef struct {
+    scoreEntry entries[5];  // Assuming you want to store the top 5 highscores
+    int count;  // Number of entries in the highscore board
+} score;
 
-private:
-    std::vector<ScoreEntry> highscores;
-    void loadHighscores();
-    void saveHighscores() const;
-};
+void initialize_highscore(score *score);
+void display_highscores(const score *score);
+void update_highscores(score *score, const char *jmeno, int score);
 
 #endif // HIGHSCORE_H

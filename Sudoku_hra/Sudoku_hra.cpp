@@ -2,8 +2,10 @@
 //
 
 #include "Sudoku_hra.h"
+#include "highscore.h"
 #include <cstdlib>
 #include <cstring>
+#include <time.h>
 
 using namespace std;
 
@@ -39,7 +41,7 @@ void uvodniTabule(int tabulka[N][N])
 	printf("<3                                                                                         <3\n");
 	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n\n");
 	printf("PRAVIDLA: Umistete cisla 1-9 misto 0 tak, aby se v radku, sloupci ani \n v malem ctverecku zadne cislo neopakovalo. Behem hry se Vam zapocitava \n cas, pricemz nejrychlejsi hraci jsou zapsani do tabulky nejvyssich score.\n\n Stisknete 1, pokud chcete zobrazit tabulku nejvyssich score.\n Stisknete 2, pokud chcete hru ulozit a pokracovat ve hre priste.\n \n \n");
-	printf("\nMnoho zdaru pri hre!\n \n");
+	printf("\nMnoho zdaru pri hre!\n \n"); //dodelat vyber pro zobrazei highscore
 	for (int radek = 0; radek < N; radek++)
 	{
 		for (int sloupec = 0; sloupec < N; sloupec++)
@@ -103,6 +105,10 @@ void hratSudoku(int pole[N][N])
 	int volba;
 	int radek, sloupec, cislo;
 
+	clock_t start, end;
+	
+	star = clock();
+
 	while (true)
 	{
 		uvodniTabule(pole);
@@ -153,15 +159,36 @@ void hratSudoku(int pole[N][N])
 
 	if (vyreseno)
 	{
-		printf("\nGratuluji k vyreseni sudoku!");
+		int jmeno;
+		printf("\nGratuluji k vyreseni sudoku!\n");
 		uvodniTabule(pole);
-	}
+		end = clock();
+		double score = ((double) (end - start + 10000));
 
+
+		void update_highscores(score *score, int score) {
+    		printf("Tve score: %d seconds.\n", score);
+
+   			 char jmeno[50];
+    		printf("Enter your name: ");
+    		scanf("%s", jmeno);
+
+    		FILE *vystupniSoubor = fopen("vystupniSoubor.txt")//?? "a"); // Open file in append mode
+
+   			 if (vysatupniSoubor != NULL) {
+       			 fprintf(vystupniSoubor, "%s %d\n", jmeno, score);
+       			 fclose(vystupniSoubor);
+       			 printf("Highscore saved successfully!\n");
+   			 } else {
+       			 printf("Error saving highscore.\n");
+   			 }
+		}
+	}
+	}
+}
 	else {
 		printf("\nSudoku nebylo vyreseno. Zkuste to znovu!\n");
 	}
-
-}
 
 int main()
 {
