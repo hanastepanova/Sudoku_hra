@@ -107,7 +107,7 @@ void hratSudoku(int pole[N][N])
 
 	clock_t start, end;
 	
-	star = clock();
+	start = clock();
 
 	while (true)
 	{
@@ -173,7 +173,7 @@ void hratSudoku(int pole[N][N])
     		printf("Enter your name: ");
     		scanf("%s", jmeno);
 
-    		FILE *vystupniSoubor = fopen("vystupniSoubor.txt")//?? "a"); // Open file in append mode
+    		FILE *vystupniSoubor = fopen("vystupniSoubor.txt","a"); // Open file in append mode
 
    			 if (vysatupniSoubor != NULL) {
        			 fprintf(vystupniSoubor, "%s %d\n", jmeno, score);
@@ -203,7 +203,7 @@ int main()
 	
 	FILE* vstupniSoubor;
 
-	if (fopen_s(&vstupniSoubor, vstupniCesta, "r"))
+	if (fopen_s(&vstupniSoubor, vstupniCesta, "r") != 0)
 	{
 		printf("Soubor se nepodarilo otevrit.\n");
 		return -1;

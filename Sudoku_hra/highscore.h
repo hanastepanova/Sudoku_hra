@@ -5,7 +5,7 @@
 
 typedef struct {
     char jmeno[50];
-    int score;
+    double score;
 } scoreEntry;
 
 typedef struct {
@@ -13,7 +13,6 @@ typedef struct {
     int count;  // Number of entries in the highscore board
 } score;
 
-void initialize_highscore(score *score);
 void display_highscores(const score *score);
 void update_highscores(score *score, const char *jmeno, int score);
 
