@@ -8,6 +8,7 @@
 #include <iostream>
 #include <windows.h>
 #include "highscore.h"
+#include <time.h>
 
 using namespace std;
 
@@ -18,10 +19,12 @@ bool kontrola(int pole[N][N], int radek, int sloupec, int cislo)
 	for (int i = 0; i < N; i++)
 		if (pole[radek][i] == cislo)
 			return false;
+
 	//kontrola, jestli neni ve stejnem sloupci
 	for (int i = 0; i < N; i++)
 		if (pole[i][sloupec] == cislo)
 			return false;
+
 	//kontrola, jestli cislo uz neni v tom malem ctverecku
 	int zacatekRadku = radek - radek % 3;
 	int zacatekSloupce = sloupec - sloupec % 3;
@@ -37,13 +40,13 @@ bool kontrola(int pole[N][N], int radek, int sloupec, int cislo)
 
 void uvodniTabule(int tabulka[N][N])
 {
-	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-	printf("<3                                                                                         <3\n");
-	printf("<3                                           SUDOKU                                        <3\n");
-	printf("<3                                                                                         <3\n");
-	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-	printf("PRAVIDLA: Umistete cisla 1-9 misto 0 tak, aby se v radku, sloupci ani \n v malem ctverecku zadne cislo neopakovalo. Behem hry se Vam zapocitava \n cas, pricemz nejrychlejsi hraci jsou zapsani do tabulky nejvyssich score.\n");
-	printf("\nMnoho zdaru pri hre!\n");
+	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+	printf("<3                                                                                                                   <3\n");
+	printf("<3                                                       SUDOKU                                                      <3\n");
+	printf("<3                                                                                                                   <3\n");
+	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
+	printf("PRAVIDLA: Umistete cisla 1-9 misto 0 tak, aby se v radku, sloupci ani v malem ctverecku zadne cislo neopakovalo. \nJiz zadane cislo do tabulky jiz nelze prepsat. Behem hry se Vam zapocitava cas, pricemz nejrychlejsi hraci jsou \ zapsani do tabulky nejvyssich score.\n");
+	printf("\nMnoho zdaru pri hre!\n\n");
 	for (int radek = 0; radek < N; radek++)
 	{
 		for (int sloupec = 0; sloupec < N; sloupec++)
@@ -95,11 +98,12 @@ bool reseniSudoku(int pole[N][N], int radek, int sloupec)
 bool kompletniReseni(int tabulka[N][N])
 {
 	for (int radek = 0; radek < N; radek++)
-		for (int sloupec = 0; sloupec < N; sloupec++)
-			if (tabulka[radek][sloupec] == 0)
+		for (int sloupec = 1; sloupec < N; sloupec++)
+			if (tabulka[radek][sloupec] == 0) {
 				return false;
-
-	return true;
+			}
+			else
+				return true;
 
 }
 
@@ -108,11 +112,14 @@ void hratSudoku(int pole[N][N])
 	int volba;
 	int radek, sloupec, cislo;
 
+	clock_t start, end;
+	start = clock();
+
 	while (true)
 	{
 		uvodniTabule(pole);
 		printf("\n");
-		printf("\nNemuzete vyresit sudoku? Zadejte 0 misto radku, sloupce i cisla pro zobrazeni reseni.\nBudete chtit pokracovat ve hre priste? Napiste 'P' misto radku, sloupce i cisla pro ulozeni Vasi hry.\n");
+		printf("\nNemuzete vyresit sudoku? Zadejte 0 misto radku, sloupce i cisla pro zobrazeni reseni.\n");
 		printf("Cislo radku: ");
 		scanf(" %d", &radek);
 		printf("Cislo sloupce: ");
@@ -120,86 +127,40 @@ void hratSudoku(int pole[N][N])
 		printf("Cislo, ktere chcete zadat: ");
 		scanf(" %d", &cislo);
 
-		if (radek == 0 || sloupec == 0 || cislo == 0)
+		if (radek == 0 && sloupec == 0 && cislo == 0)
 		{
 			reseniSudoku(pole, 0, 0);
-			printf("Vyresene sudoku:");
-			printf("\n");
 			uvodniTabule(pole);
 			printf("\n");
-
-			//bool vyplneno = kompletniReseni(pole);
-
-			if (kompletniReseni(pole))
-			{
-				printf("\nGratuluji k vyreseni sudoku!");
-			}
-			else
-			{
-				printf("\nSudoku nebylo vyreseno spravne. Zkuste to znovu.");
-			}
+			printf("Vyresene sudoku:\n");
 			return;
-		}
-
-		if (kompletniReseni(pole))
-		{
-			break;
 		}
 
 		radek--;
 		sloupec--;
 
-
 		if (!kontrola(pole, radek, sloupec, cislo))
 		{
-			printf("\nNeni mozne doplnit toto cislo. Zkuste to znovu.\n");
+			printf("\n\n\n\n\nNeni mozne doplnit toto cislo. Zkuste to znovu.\n");
 			continue;
 		}
+
+
+		if (kompletniReseni(pole) == true)
+
+		{
+			printf("\nGratuluji k vyreseni sudoku!\n");
+			end = clock();
+			double score = ((double)(end - start));
+			printf("score: %lf\n", score);
+			updateHighscore(score);
+
+		}
+
 		pole[radek][sloupec] = cislo;
 
 	}
 
-	if (kompletniReseni(pole))
-	{
-		printf("\nGratuluji k vyreseni sudoku!");
-		uvodniTabule(pole);
-	}
-	else
-	{
-		printf("\nSudoku nebylo vyreseno spravne. Zkuste to znovu!");
-
-	}
-
-
-	//bool vyreseno = true; 
-
-	//for (int i = 0; i < N; ++i) 
-	//{
-		//for (int j = 0; j < N; ++j)
-		//{
-			//if (pole[i][j] == 0)
-			//{
-			//	vyreseno = false; 
-			//	break;
-			//}
-	//	}
-//	if (!vyreseno)
-	//	{
-	//		break;
-	//	}
-	//}
-
-
-
-	//if (vyreseno)  
-	//{
-	//	printf("\nGratuluji k vyreseni sudoku!"); 
-	//	uvodniTabule(pole);
-	//}
-
-//	else {
-	//	printf("\nSudoku nebylo vyreseno. Zkuste to znovu!");
-	//}
 }
 
 
@@ -207,9 +168,7 @@ int main()
 {
 
 	int pole[N][N];
-
-	const char* vstupniCesta = "C:\\Users\\42060\\source\\repos\\Sudoku_hra\\sudoku02.txt";
-
+	const char* vstupniCesta = "C:\\Users\\42060\\source\\repos\\Sudoku_hra\\sudoku02 - kopie.txt";
 
 	FILE* vstupniSoubor;
 
@@ -251,18 +210,18 @@ int main()
 		//{0, 0, 5, 2, 0, 6, 3, 0, 0}
 		//};
 
-	printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-	printf("<3                                                                                         <3\n");
-	printf("<3                                           SUDOKU                                        <3\n");
-	printf("<3                                                                                         <3\n");
-	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
+	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+	printf("<3                                                                                                                   <3\n");
+	printf("<3                                                       SUDOKU                                                      <3\n");
+	printf("<3                                                                                                                   <3\n");
+	printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
 
 
 	while (true)
 	{
 		int volba;
-		printf("\nVitame Vas u hry Sudoku! Jste pripraveni zucastnit se teto vzrusujici hry?\n\n Stisknete 1, pokud chcete zacit hrat!\n Stisknete 2, pokud chcete zobrazit reseni.\n Stisknete 3, pokud chcete zobrazit tabulku nejvyssich score.\n");
-		printf("Vase volba: \n");
+		printf("\nVitame Vas u hry Sudoku! Jste pripraveni zucastnit se teto vzrusujici hry?\n\nStisknete 1, pokud chcete zacit hrat!\nStisknete 2, pokud chcete zobrazit reseni.\n");
+		printf("\nVase volba: ");
 		scanf("%d", &volba);
 
 		switch (volba)
@@ -289,22 +248,20 @@ int main()
 					{
 						printf("\n");
 						for (int i = 0; i < N; i++)
-							printf(" - -");
+							printf(" -");
 					}
 					printf("\n");
 
 				}
 				printf("\n");
-				printf("\nZkuste to priste!");
+				printf("\nZkuste to priste!\n\n");
 
 			}
 			else
 				printf("\nReseni nebylo nalezeno.\n");
 			break;
-		case 3:
-			exit(0);
-		default:
-			printf("\nNespravna volba.\n");
+
+
 
 		}
 		return 0;
