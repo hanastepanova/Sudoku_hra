@@ -159,11 +159,11 @@ void hratSudoku(int pole[N][N])
 
 	if (vyreseno)
 	{
-		int jmeno;
+		//int jmeno;
 		printf("\nGratuluji k vyreseni sudoku!\n");
 		uvodniTabule(pole);
 		end = clock();
-		double score = ((double) (end - start + 10000));
+		double score = ((double) (end - start));
 
 
 		void update_highscores(score *score, int score) {
